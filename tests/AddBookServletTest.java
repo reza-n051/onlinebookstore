@@ -20,6 +20,12 @@ public class AddBookServletTest{
     private ServletRequest srq ;
     private ServletResponse srp;
     private RequestDispatcher rd;
+    // private String[] inputs = {"bookName","BarCodeee","100","2","A"};
+    // private String output = "<div class=\"tab\">Book Detail Updated Successfully!<br/>Add More Books</div>";
+    private String[] inputs = {"bookName","abc","10s0","2","A"};
+    private String output = "";
+    // private String[] inputs = {"bookName","BarCodeee","100","2","A"};
+    // private String output = "<div class=\"tab\">Failed to Add Books! Fill up CareFully</div>";
     @BeforeEach
     public void init(){
         srq = mock(ServletRequest.class);
@@ -31,19 +37,18 @@ public class AddBookServletTest{
     public void testService(){
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
-        
-        when(srq.getParameter(IBookConstants.COLUMN_NAME)).thenReturn("arg0");
-        when(srq.getParameter(IBookConstants.COLUMN_BARCODE)).thenReturn("nj00hg");
-        when(srq.getParameter(IBookConstants.COLUMN_PRICE)).thenReturn("100");
-        when(srq.getParameter(IBookConstants.COLUMN_QUANTITY)).thenReturn("2");
-        when(srq.getParameter(IBookConstants.COLUMN_AUTHOR)).thenReturn("A");
+        when(srq.getParameter(IBookConstants.COLUMN_NAME)).thenReturn(inputs[0]);
+        when(srq.getParameter(IBookConstants.COLUMN_BARCODE)).thenReturn(inputs[1]);
+        when(srq.getParameter(IBookConstants.COLUMN_PRICE)).thenReturn(inputs[2]);
+        when(srq.getParameter(IBookConstants.COLUMN_QUANTITY)).thenReturn(inputs[3]);
+        when(srq.getParameter(IBookConstants.COLUMN_AUTHOR)).thenReturn(inputs[4]);
         when(srq.getRequestDispatcher("AddBook.html")).thenReturn(rd);
         try {
             when(srp.getWriter()).thenReturn(pw);   
             AddBookServlet abs = new AddBookServlet();   
             abs.service(srq, srp);
             System.out.println(sw.getBuffer().toString().trim());
-            assertTrue(sw.getBuffer().toString().trim().equals("<div class=\"tab\">Book Detail Updated Successfully!<br/>Add More Books</div>"));
+            assertTrue(sw.getBuffer().toString().trim().equals(output));
         } catch (IOException | ServletException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
